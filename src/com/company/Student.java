@@ -53,7 +53,39 @@ public class Student extends Person {
         }
         return occupied;
     }
+
+    public void signInCourse (int courseID){
+        int occupiedSeats = getNumberOfOccupiedSeats(courseID);
+        int maxSeats = 0;
+        Connection conn;
+        try {
+            String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
+            conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            String query = "SELECT max_amount_seats FROM `course` WHERE id = " + courseID;
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()){
+                maxSeats = rs.getInt("max_amount_seats");
+            }
+        } catch (SQLException ex){
+            throw new Error("Problem", ex);
+        }
+        if (occupiedSeats < maxSeats){
+            try {
+                String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
+                conn = DriverManager.getConnection(url);
+                Statement stmt = conn.createStatement();
+                String command = "INSERT INTO `student_course`(`course_id`, `student_id`) " +
+                        "VALUES (" + courseID + "," + this.getId() + ")";
+                stmt.executeUpdate(command);
+                System.out.println("You've successfully signed in.");
+            } catch (SQLException ex){
+                throw new Error("Problem", ex);
+            }
+        } else {
+            System.out.println("Sorry, this course ist already full. You cannot sign in.");
+        }
+    }
 }
 
-//todo: enrol for a course with error/success message
 //todo: print list of all attended courses and the result

@@ -13,12 +13,18 @@ public class StudentProgram {
         while (true) {
             System.out.println("\nYou have now following possibilities. Enter the number of one option.");
             System.out.println("1) print a list of all courses");
-            System.out.println("2) log out");
+            System.out.println("2) sign in for a course");
+            System.out.println("3) log out");
             choice = scannerForInt.nextInt();
             if (choice == 1) {
                 System.out.println("LIST OF ALL COURSES: ");
                 student.printAllCourses();
-            } else if (choice == 2) {
+            } else if (choice == 2){
+                System.out.println("Which course do you want to choose? Enter the course number.");
+                int courseID = scannerForInt.nextInt();
+                System.out.println("SIGN IN");
+                student.signInCourse(courseID);
+            } else if (choice == 3) {
                 break;
             } else {
                 System.out.println("wrong number. Please try again.");
