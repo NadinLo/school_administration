@@ -7,7 +7,8 @@ public class Student extends Person {
     public String getRole() {
         return "Student";
     }
-    public void printAllCourses () {
+
+    public void printAllCourses() {
         Connection conn;
         try {
             String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
@@ -21,17 +22,17 @@ public class Student extends Person {
             ResultSet rs = stmt.executeQuery(query);
             System.out.println("course No | course title       | teacher            | free seats\n" +
                     "-----------------------------------------------------------------");
-            while (rs.next()){
+            while (rs.next()) {
                 int courseID = rs.getInt("course.id");
                 String courseName = rs.getString("course.name") + "                    ";
                 String teacherName = rs.getString("teacher") + "                    ";
                 int maxSeats = rs.getInt("max_amount_seats");
                 int freeSeats = maxSeats - getNumberOfOccupiedSeats(courseID);
                 String print = courseID + "          ";
-                System.out.println("   " + print.substring(0,7) + "| " +
-                        courseName.substring(0,19) + "| " + teacherName.substring(0,19) + "| " + freeSeats);
+                System.out.println("   " + print.substring(0, 7) + "| " +
+                        courseName.substring(0, 19) + "| " + teacherName.substring(0, 19) + "| " + freeSeats);
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new Error("Problem", ex);
         }
     }
@@ -54,7 +55,7 @@ public class Student extends Person {
         return occupied;
     }
 
-    public void signInCourse (int courseID){
+    public void signInCourse(int courseID) {
         int occupiedSeats = getNumberOfOccupiedSeats(courseID);
         int maxSeats = 0;
         Connection conn;
@@ -64,13 +65,13 @@ public class Student extends Person {
             Statement stmt = conn.createStatement();
             String query = "SELECT max_amount_seats FROM `course` WHERE id = " + courseID;
             ResultSet rs = stmt.executeQuery(query);
-            if (rs.next()){
+            if (rs.next()) {
                 maxSeats = rs.getInt("max_amount_seats");
             }
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new Error("Problem", ex);
         }
-        if (occupiedSeats < maxSeats){
+        if (occupiedSeats < maxSeats) {
             try {
                 String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
                 conn = DriverManager.getConnection(url);
@@ -79,13 +80,59 @@ public class Student extends Person {
                         "VALUES (" + courseID + "," + this.getId() + ")";
                 stmt.executeUpdate(command);
                 System.out.println("You've successfully signed in.");
-            } catch (SQLException ex){
+            } catch (SQLException ex) {
                 throw new Error("Problem", ex);
             }
         } else {
             System.out.println("Sorry, this course ist already full. You cannot sign in.");
         }
     }
-}
 
-//todo: print list of all attended courses and the result
+    public void printAttendedCourses(int studentID) {
+        Connection conn;
+        try {
+            String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
+            conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            String query = "SELECT course.id, course.name, student_course.grade " +
+                    "FROM student_course " +
+                    "INNER JOIN course ON student_course.course_id = course.id " +
+                    "WHERE student_id = " + studentID;
+            ResultSet rs = stmt.executeQuery(query);
+            System.out.println("course No | course title       | teacher            | grade\n" +
+                    "-----------------------------------------------------------------");
+            while (rs.next()) {
+                int courseID = rs.getInt("course.id");
+                String courseName = rs.getString("course.name") + "                    ";
+                String teacherName = getTeacherName(courseID) + "                    ";
+                String grade = rs.getString("student_course.grade");
+                String print = courseID + "          ";
+                System.out.println("   " + print.substring(0, 7) + "| " +
+                        courseName.substring(0, 19) + "| " + teacherName.substring(0, 19) + "| " + grade);
+            }
+        } catch (SQLException ex) {
+            throw new Error("Problem", ex);
+        }
+    }
+
+    private String getTeacherName(int courseID) {
+        Connection conn;
+        String teacherName = null;
+        try {
+            String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
+            conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            String query = "SELECT concat(person.first_name, ' ', person.last_name) as 'teacher'" +
+                    "FROM `course` " +
+                    "INNER JOIN person ON course.teacher_id = person.id " +
+                    "WHERE course.id = " + courseID;
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                teacherName = rs.getString("teacher");
+            }
+        } catch (SQLException ex) {
+            throw new Error("Problem", ex);
+        }
+        return teacherName;
+    }
+}
