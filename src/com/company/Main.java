@@ -21,9 +21,7 @@ public class Main {
                 System.out.println("either your username or password were not correct. Please try again.");
             }
         }
-        Person user = login(username, password);
-        System.out.println("You are now logged in as " +
-                user.getFirst_name() + " " + user.getLast_name() + " (" + user.getClass().getSimpleName() + ")");
+        login(username, password);
     }
 
     private static boolean checkLoginData (String username, String password){
@@ -45,9 +43,8 @@ public class Main {
         return loginCheck;
     }
 
-    private static Person login (String username, String password){
+    private static void login (String username, String password){
         Connection conn;
-        Person user = null;
         try {
             String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
             conn = DriverManager.getConnection(url);
@@ -55,26 +52,32 @@ public class Main {
             String query = "SELECT * FROM `person` " +
                     "WHERE `user_name`= '" + username + "' AND `password` = '" + password + "'";
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()){
+            if (rs.next()){
                 String role = rs.getString("role");
                 if (role.equalsIgnoreCase("ADMINISTRATOR")){
-                    user = new Administrator();
-                }
-                else if (role.equalsIgnoreCase("TEACHER")){
-                    user = new Teacher();
-                }
-                else if (role.equalsIgnoreCase("STUDENT")){
-                    user = new Student();
-                }
-                if (user != null) {
+                    Administrator user = new Administrator();
                     user.setId(rs.getInt("id"));
                     user.setFirst_name(rs.getString("first_name"));
                     user.setLast_name(rs.getString("last_name"));
+                    AdminProgram.start(user);
+                }
+                else if (role.equalsIgnoreCase("TEACHER")){
+                    Teacher user = new Teacher();
+                    user.setId(rs.getInt("id"));
+                    user.setFirst_name(rs.getString("first_name"));
+                    user.setLast_name(rs.getString("last_name"));
+                    TeacherProgram.start(user);
+                }
+                else if (role.equalsIgnoreCase("STUDENT")){
+                    Student user = new Student();
+                    user.setId(rs.getInt("id"));
+                    user.setFirst_name(rs.getString("first_name"));
+                    user.setLast_name(rs.getString("last_name"));
+                    StudentProgram.start(user);
                 }
             }
         } catch (SQLException ex){
             throw new Error("Problem", ex);
         }
-        return user;
     }
 }
