@@ -10,7 +10,7 @@ public class Administrator extends Person {
         return role;
     }
 
-    private void createCourse (String name, int max_amount_seats, int teacher_id){
+    public void createCourse (String name, int max_amount_seats, int teacher_id){
         Connection conn = null;
         boolean isIdCorrect = isIdCorrect(teacher_id);
         if (isIdCorrect){
