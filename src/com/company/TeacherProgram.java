@@ -13,7 +13,7 @@ public class TeacherProgram {
         while (true) {
             System.out.println("\nYou have now following possibilities. Enter the number of one option.");
             System.out.println("1) print list of all courses which are taught by oneself");
-            System.out.println("2) ");
+            System.out.println("2) print list of students who attend to a course you teach");
             System.out.println("3) ");
             System.out.println("4) log out");
 
@@ -22,7 +22,8 @@ public class TeacherProgram {
                 System.out.println("LIST OF ALL COURSES: ");
                 teacher.printAllTaughtCourses(teacher.getId());
             } else if (choice == 2) {
-
+                System.out.println("Please enter the number of the course you want to see the students list");
+                teacher.printStudentListForCourse(scannerForInt.nextInt());
             } else if (choice == 3) {
 
             } else if (choice == 4) {
