@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class StudentProgram {
     public static void start (Student student){
         Scanner scannerForInt = new Scanner(System.in);
-        Scanner scannerForString = new Scanner(System.in);
         System.out.println("You are now logged in as " +
                 student.getFirst_name() + " " + student.getLast_name() + " (" + student.getRole() + ")");
 
