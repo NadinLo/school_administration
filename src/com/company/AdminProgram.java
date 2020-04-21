@@ -9,7 +9,7 @@ public class AdminProgram {
         System.out.println("You are now logged in as " +
                 admin.getFirst_name() + " " + admin.getLast_name() + " (" + admin.getRole() + ")");
 
-        int choice = 0;
+        int choice;
         while (true) {
             System.out.println("You have now following possibilities. Enter the number of one option.");
             System.out.println("1) create new courses");

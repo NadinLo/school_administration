@@ -6,12 +6,11 @@ import java.util.ArrayList;
 public class Administrator extends Person {
 
     public String getRole() {
-        String role = "ADMINISTRATOR";
-        return role;
+        return "ADMINISTRATOR";
     }
 
     public void createCourse (String name, int max_amount_seats, int teacher_id){
-        Connection conn = null;
+        Connection conn;
         boolean isIdCorrect = isIdCorrect(teacher_id);
         if (isIdCorrect){
             try {
@@ -30,7 +29,7 @@ public class Administrator extends Person {
     }
 
     private boolean isIdCorrect (int teacher_id){
-        Connection conn = null;
+        Connection conn;
         boolean isIdCorrect = false;
         try {
             String url = "jdbc:mysql://localhost:3306/school_administration?user=root";
