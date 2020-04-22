@@ -1,5 +1,4 @@
 package com.company;
-
 import java.util.Scanner;
 
 public class AdminProgram {
@@ -24,12 +23,13 @@ public class AdminProgram {
                 System.out.print("enter the id of the teacher who's going to take the lesson: ");
                 int teacherID = scannerForInt.nextInt();
                 admin.createCourse(name, maxAmountSeats, teacherID);
-            } else if (choice == 2) {
+            }
+            else if (choice == 2) {
                 break;
-            } else {
+            }
+            else {
                 System.out.println("wrong number. Please try again.");
             }
-
         }
     }
 }

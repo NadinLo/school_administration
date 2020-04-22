@@ -57,7 +57,9 @@ public class DBConnector {
         } catch (SQLException ex){
             System.out.println("could't edit table");
             ex.printStackTrace();
-        } closeConnection();
+        } finally {
+            closeConnection();
+        }
         return true;
     }
 }

@@ -22,10 +22,12 @@ public class TeacherProgram {
             if (choice == 1) {
                 System.out.println("LIST OF ALL COURSES: ");
                 teacher.printAllTaughtCourses(teacher.getId());
-            } else if (choice == 2) {
+            }
+            else if (choice == 2) {
                 System.out.println("Please enter the number of the course you want to see the students list");
                 teacher.printStudentListForCourse(scannerForInt.nextInt());
-            } else if (choice == 3) {
+            }
+            else if (choice == 3) {
                 System.out.println("Please enter the student's id and the number of the course you want to grade.");
                 System.out.print("student's id: "); int studentID = scannerForInt.nextInt();
                 System.out.print("course number: "); int courseID = scannerForInt.nextInt();
@@ -34,9 +36,11 @@ public class TeacherProgram {
                 String grade = scannerForString.nextLine();
                 teacher.grade(courseID, studentID, grade);
 
-            } else if (choice == 4) {
+            }
+            else if (choice == 4) {
                 break;
-            } else {
+            }
+            else {
                 System.out.println("wrong number. Please try again.");
             }
         }

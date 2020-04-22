@@ -19,17 +19,21 @@ public class StudentProgram {
             if (choice == 1) {
                 System.out.println("LIST OF ALL COURSES: ");
                 student.printAllCourses();
-            } else if (choice == 2) {
+            }
+            else if (choice == 2) {
                 System.out.println("Which course do you want to choose? Enter the course number.");
                 int courseID = scannerForInt.nextInt();
                 System.out.println("SIGN IN");
                 student.signInCourse(courseID);
-            } else if (choice == 3) {
+            }
+            else if (choice == 3) {
                 System.out.println("YOUR COURSES: ");
                 student.printAttendedCourses(student.getId());
-            } else if (choice == 4) {
+            }
+            else if (choice == 4) {
                 break;
-            } else {
+            }
+            else {
                 System.out.println("wrong number. Please try again.");
             }
 
