@@ -42,8 +42,22 @@ public class DBConnector {
         } catch (SQLException ex){
             System.out.println("could not call the required data");
             ex.printStackTrace();
-            closeConnection();
         }
         return null;
+    }
+
+    public boolean editTable (String sql) {
+        int ok;
+        buildConnection();
+        try {
+            ok = stmt.executeUpdate(sql);
+            if (ok != 1){
+                return false;
+            }
+        } catch (SQLException ex){
+            System.out.println("could't edit table");
+            ex.printStackTrace();
+        } closeConnection();
+        return true;
     }
 }

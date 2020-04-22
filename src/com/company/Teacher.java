@@ -2,6 +2,7 @@ package com.company;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Teacher extends Person{
     private DBConnector dbConnector = new DBConnector("jdbc:mysql://localhost:3306/school_administration?user=root");
@@ -9,6 +10,7 @@ public class Teacher extends Person{
     public String getRole() {
         return "TEACHER";
     }
+
     public void printAllTaughtCourses (int teacherID){
         ResultSet rs = dbConnector.callUp ("SELECT * FROM course WHERE course.teacher_id =" + teacherID);
         if (rs == null){
@@ -97,7 +99,42 @@ public class Teacher extends Person{
         } return true;
     }
 
+    private boolean checkStudent (int courseID, int studentID){
+        ResultSet rs = dbConnector.callUp("SELECT student_id FROM student_course WHERE course_id = " + courseID);
+        ArrayList<Integer> students = new ArrayList<>();
+        try {
+            while (rs.next()){
+                students.add(rs.getInt("student_id"));
+            }
+            if (!students.contains(studentID)){
+                return false;
+            }
+        } catch (SQLException ex){
+            System.out.println("couldn't find the course participants or course.");
+            ex.printStackTrace();
+        } dbConnector.closeConnection();
+        return true;
+    }
+
+    public void grade (int courseID, int studentID, String grade){
+        if (checkTeacher(courseID)){
+            if (checkStudent(courseID, studentID)){
+                //todo: a further check if grade is already given could be possible
+                if (dbConnector.editTable("UPDATE student_course SET grade= " + grade +
+                        " WHERE course_id = " + courseID + " AND student_id = " + studentID)){
+                    System.out.println("Your entry was successful.");
+                }
+                else {
+                    System.out.println("Your entry wasn't successful. Please try again.");
+                }
+            } else {
+                System.out.println("student is not attending this course");
+            }
+        } else {
+            System.out.println("You don't teach this course");
+        }
+    }
 }
 
 
-//todo: give a grade to a student for a course he*she attends to
+
