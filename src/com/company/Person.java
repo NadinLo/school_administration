@@ -4,6 +4,7 @@ public abstract class Person {
     private int id;
     private String first_name;
     private String last_name;
+    DBConnector dbConnector = new DBConnector("jdbc:mysql://localhost:3306/school_administration?user=root");
 
     public int getId() {
         return id;

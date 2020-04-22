@@ -5,15 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Teacher extends Person{
-    private DBConnector dbConnector = new DBConnector("jdbc:mysql://localhost:3306/school_administration?user=root");
 
     public String getRole() {
         return "TEACHER";
     }
 
-    public void printAllTaughtCourses (int teacherID){
-        ResultSet rs = dbConnector.callUp ("SELECT * FROM course WHERE course.teacher_id =" + teacherID);
-        if (rs == null){
+    public void printAllTaughtCourses (int teacherID) {
+        ResultSet rs = dbConnector.callUp("SELECT * FROM course WHERE course.teacher_id =" + teacherID);
+        if (rs == null) {
             System.out.println("You don't teach anything this year.");
         } else {
             System.out.println("course No | course title       | attendance\n" +
@@ -44,8 +43,6 @@ public class Teacher extends Person{
                 dbConnector.closeConnection();
             }
         }
-
-
     }
 
     public void printStudentListForCourse (int courseID){
@@ -95,6 +92,8 @@ public class Teacher extends Person{
             } catch (SQLException ex){
                 System.out.println("couldn't find a teacher's ID");
                 ex.printStackTrace();
+            } finally {
+                dbConnector.closeConnection();
             }
         } return true;
     }
@@ -112,7 +111,9 @@ public class Teacher extends Person{
         } catch (SQLException ex){
             System.out.println("couldn't find the course participants or course.");
             ex.printStackTrace();
-        } dbConnector.closeConnection();
+        } finally {
+            dbConnector.closeConnection();
+        }
         return true;
     }
 
